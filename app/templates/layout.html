@@ -1,0 +1,66 @@
+{% extends "bootstrap/base.html" %}
+
+{% block title %}
+    {{ title }}
+{% endblock %}
+
+{% block navbar %}
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark static-top">
+    <div class="container">
+      <a class="navbar-brand" href="#"></a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+        <div class="navbar-nav ml-auto">
+          {% if current_user.is_authenticated %}
+            <li class="nav-item {% if active == 'tasks' %} active {% endif %}">
+              <a class="nav-link" href="{{ url_for('.tasks') }}">Tasks</a>
+            </li>
+            <li class="nav-item {% if active == 'new_task' %} active {% endif %}">
+              <a class="nav-link" href="{{ url_for('.new_task') }}">New task</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{{ url_for('.logout') }}">Logout</a>
+            </li>
+            {% else %}
+            <li class="nav-item {% if active == 'login' %} active {% endif %}">
+              <a class="nav-link" aria-current="page" href="{{ url_for('.login') }}">Login</a>
+            </li>
+            <li class="nav-item {% if active == 'register' %} active {% endif %}">
+              <a class="nav-link" href="{{ url_for('.register') }}">Register</a>
+            </li>            
+          {% endif %}
+
+        </div>
+      </div>
+    </div>
+  </nav>
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row">
+
+      <div class="col-md-12 col-md-offset-1">
+        {% with messages = get_flashed_messages(with_categories=True) %}
+        {% if messages %}
+          {% for category, message in messages %}
+            {% if category == 'error' %}
+            <div class="alert alert-danger" role="alert">
+                {{ message }}
+            </div>
+            {% else %}
+            <div class="alert alert-success" role="alert">
+              {{ message }}
+            </div>
+            {% endif %}            
+          {% endfor %}
+        {% endif %}
+        {% endwith %}
+      </div>
+        {% block container %}
+        {% endblock %}
+    </div>
+</div>
+{% endblock %}
